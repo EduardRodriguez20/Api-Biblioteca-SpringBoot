@@ -17,13 +17,16 @@ public class CambiarPrestamoDTOConvert {
     
     private PrestamoRepository prestamoRepository;
 
+    @SuppressWarnings("null")
     public PrestamoEntity convertEntity(CambiarPrestamoDTO dto) {
         PrestamoEntity prestamo = new PrestamoEntity();
         Optional<PrestamoEntity> existPrestamo = prestamoRepository.findById(dto.getCodigo_prestamo());
-        if (existPrestamo.isPresent() && existPrestamo.get().getEstado() != EstadoPrestamo.CANCELADO) {
-            prestamo = existPrestamo.get();
-            prestamo.setEstado(dto.getEstadoPrestamo());
-            return prestamo;
+        if (existPrestamo.isPresent()) {
+            if (existPrestamo.get().getEstado() != EstadoPrestamo.CANCELADO) {
+                prestamo = existPrestamo.get();
+                prestamo.setEstado(dto.getEstadoPrestamo());
+                return prestamo;
+            }
         }
         return prestamo;
     }

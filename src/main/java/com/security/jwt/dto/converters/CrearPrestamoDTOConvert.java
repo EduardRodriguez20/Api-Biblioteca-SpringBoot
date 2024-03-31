@@ -23,7 +23,7 @@ public class CrearPrestamoDTOConvert {
 
     public CrearPrestamoDTO convertDTO(PrestamoEntity prestamo) {
         CrearPrestamoDTO result = new CrearPrestamoDTO();
-        result.setCodigo_Libro(prestamo.getLibro().getId());
+        result.setCodigo_libro(prestamo.getLibro().getId());
         result.setEmailUsuario(prestamo.getUsuario().getEmail());
         result.setPrestamo(prestamo.getPrestamo());
         result.setDevolucion(prestamo.getDevolucion());
@@ -31,8 +31,9 @@ public class CrearPrestamoDTOConvert {
         return result;
     }
 
+    @SuppressWarnings("null")
     public PrestamoEntity convertEntity(CrearPrestamoDTO dto) {
-        Optional<LibroEntity> libro = libroRepository.findById(dto.getCodigo_Libro());
+        Optional<LibroEntity> libro = libroRepository.findById(dto.getCodigo_libro());
         Optional<UserEntity> usuario = repositoryUser.findByEmail(dto.getEmailUsuario());
         if (libro.isPresent() && usuario.isPresent()) {
             PrestamoEntity prestamoEntity = new PrestamoEntity();

@@ -31,10 +31,11 @@ public class JWTValidationFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_HEADER_BEARER = "Bearer ";
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                                   HttpServletResponse response,
-                                                   FilterChain filterChain) throws ServletException, IOException {
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         final var requestTokenHeader = request.getHeader(AUTHORIZATION_HEADER);
         String username = null;
         String jwt = null;
@@ -58,7 +59,6 @@ public class JWTValidationFilter extends OncePerRequestFilter {
             if (this.jwtService.validateToken(jwt, userDetails)) {
                 var usernameAndPassAuthToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
-
                 usernameAndPassAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernameAndPassAuthToken);
             }

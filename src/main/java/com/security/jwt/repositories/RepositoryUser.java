@@ -10,5 +10,6 @@ import com.security.jwt.repositories.entities.UserEntity;
 public interface RepositoryUser extends CrudRepository<UserEntity,BigInteger> {
 
     Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> deleteByEmail(String email);
     
 }

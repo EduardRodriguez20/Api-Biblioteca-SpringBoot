@@ -5,12 +5,20 @@ import java.util.Date;
 import com.security.jwt.resources.enums.EstadoPrestamo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class CrearPrestamoDTO {
-    private Long codigo_Libro;
+    private Long codigo_libro;
     private String emailUsuario;
     private Date prestamo = new Date();
     private Date devolucion;
     private EstadoPrestamo estado;
+
+    public CrearPrestamoDTO(Long codigo_libro, String emailUsuario, Date devolucion){
+        this.codigo_libro = codigo_libro;
+        this.emailUsuario = emailUsuario;
+        this.devolucion = devolucion;
+    }
 }

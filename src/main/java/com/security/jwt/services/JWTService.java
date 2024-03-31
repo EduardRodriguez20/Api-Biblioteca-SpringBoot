@@ -67,6 +67,7 @@ public class JWTService {
         final var usernameFromUserDetails  = userDetails.getUsername();
         final var usernameFromJWT  = this.getUsernameFromToken(token);
 
+        //Habia un ! en la respuesta a isTokenExpired()
         return (usernameFromUserDetails.equals(usernameFromJWT)) && !this.isTokenExpired(token);
     }
 }

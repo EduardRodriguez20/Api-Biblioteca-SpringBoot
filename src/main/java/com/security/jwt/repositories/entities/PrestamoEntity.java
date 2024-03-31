@@ -1,7 +1,5 @@
 package com.security.jwt.repositories.entities;
 
-// import java.time.LocalDate;
-// import java.time.ZoneId;
 import java.util.Date;
 
 import com.security.jwt.resources.enums.EstadoPrestamo;
@@ -21,12 +19,14 @@ public class PrestamoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "libros_id")
     private LibroEntity libro;
-    @Column(nullable = false)
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
     private UserEntity usuario;
+    
     @Column(nullable = false)
     private Date prestamo;
     @Column(nullable = false)
@@ -36,11 +36,10 @@ public class PrestamoEntity {
     @Column(nullable = false)
     private EstadoPrestamo estado;
 
+    // Auto devolution date function
     // public Date fechaDevolucion(){
     //     LocalDate newDate = prestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     //     newDate = newDate.plusMonths(1);
     //     return Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     // }
-
-
 }

@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 import com.security.jwt.dto.ListarPrestamoDTO;
 import com.security.jwt.repositories.entities.PrestamoEntity;
 
-import lombok.AllArgsConstructor;
-
 @Component
-@AllArgsConstructor
 public class ListarPrestamoDTOConvert {
 
     public ListarPrestamoDTO convertDTO(PrestamoEntity prestamo) {

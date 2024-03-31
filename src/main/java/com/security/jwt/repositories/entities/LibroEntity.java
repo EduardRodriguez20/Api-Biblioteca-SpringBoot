@@ -19,10 +19,15 @@ public class LibroEntity {
     private String titulo;
     private String autor;
     private String genero;
+    @Column(name = "anno")
     private int año;
     private int inventario;
 
     public boolean existeInventario(){
         return this.inventario > 0;
+    }
+
+    public void libroPrestado(){
+        this.inventario--;
     }
 }

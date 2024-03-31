@@ -11,7 +11,9 @@ import com.security.jwt.dto.ListarPrestamoDTO;
 import com.security.jwt.dto.converters.CambiarPrestamoDTOConvert;
 import com.security.jwt.dto.converters.CrearPrestamoDTOConvert;
 import com.security.jwt.dto.converters.ListarPrestamoDTOConvert;
+import com.security.jwt.repositories.LibroRepository;
 import com.security.jwt.repositories.PrestamoRepository;
+import com.security.jwt.repositories.entities.LibroEntity;
 import com.security.jwt.repositories.entities.PrestamoEntity;
 import com.security.jwt.services.PrestamoService;
 
@@ -22,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class PrestamoServiceImpl implements PrestamoService{
 
     private PrestamoRepository prestamoRepository;
+    private LibroRepository libroRepository;
     private CrearPrestamoDTOConvert crearPrestamoDTO;
     private CambiarPrestamoDTOConvert cambiarPrestamoDTO;
     private ListarPrestamoDTOConvert listarPrestamoDTO;
@@ -30,8 +33,11 @@ public class PrestamoServiceImpl implements PrestamoService{
     public CrearPrestamoDTO crear(CrearPrestamoDTO crearPrestamo) {
         CrearPrestamoDTO crearDTO = new CrearPrestamoDTO();
         PrestamoEntity prestamo = crearPrestamoDTO.convertEntity(crearPrestamo);
-        if (prestamo != null) {
+        if (prestamo != null && prestamo.getLibro().existeInventario()) {
             crearDTO = crearPrestamoDTO.convertDTO(prestamoRepository.save(prestamo));
+            LibroEntity libro = prestamo.getLibro();
+            libro.libroPrestado();
+            libroRepository.save(libro);
             return crearDTO;
         }
         return crearDTO;
