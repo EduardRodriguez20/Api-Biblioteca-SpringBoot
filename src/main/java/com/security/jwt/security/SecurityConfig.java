@@ -34,7 +34,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                     .requestMatchers("/prestamos/crear", "/libreria/listar").authenticated()
                     .requestMatchers("/prestamos/**", "/libreria/**").hasAnyRole("LIBRARIAN", "ADMIN")
-                    .requestMatchers("/users/**").hasRole("ADMIN")           
+                    .requestMatchers("/users/**").hasRole("ADMIN")
+                    .requestMatchers("/authenticate", "/register").permitAll()
                     .anyRequest().authenticated())
                 .addFilterAfter(jwtValidationFilter, BasicAuthenticationFilter.class);
         http.cors(cors -> corsConfigurationSource());
