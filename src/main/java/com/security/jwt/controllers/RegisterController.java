@@ -22,9 +22,7 @@ public class RegisterController {
 
     @PostMapping("/register")
     public ResponseEntity<String> save(@RequestBody CreateUserDTO userDTO) {
-        System.out.println(userDTO);
         UserDTO user = userService.save(userDTOConvert.convertUserDTO(userDTO));
-        System.out.println(user);
         if (user!= null) {
             return new ResponseEntity<>("Usuario creado correctamente", HttpStatus.CREATED);
         }

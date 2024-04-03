@@ -28,15 +28,16 @@ public class SecurityConfig {
     @Autowired
     SecurityFilterChain securityFilterChain(HttpSecurity http, JWTValidationFilter jwtValidationFilter)
             throws Exception {
-        http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         // var requestHandler = new CsrfTokenRequestAttributeHandler();
         // requestHandler.setCsrfRequestAttributeName("_csrf");
+        http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth -> auth
                     .requestMatchers("/prestamos/crear", "/libreria/listar").authenticated()
                     .requestMatchers("/prestamos/**", "/libreria/**").hasAnyRole("LIBRARIAN", "ADMIN")
                     .requestMatchers("/users/**").hasRole("ADMIN")
                     .requestMatchers("/authenticate", "/register").permitAll()
-                    .anyRequest().authenticated())
+                    .requestMatchers(SWAGGER_WHILELIST).permitAll()
+                    .anyRequest().permitAll())
                 .addFilterAfter(jwtValidationFilter, BasicAuthenticationFilter.class);
         http.cors(cors -> corsConfigurationSource());
         http.csrf(csrf -> csrf.disable());
@@ -47,6 +48,13 @@ public class SecurityConfig {
         //         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
         return http.build();
     }
+
+    private static final String[] SWAGGER_WHILELIST = {
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-resources/**",
+        "/swagger-resources"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
