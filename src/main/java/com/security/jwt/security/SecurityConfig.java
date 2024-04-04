@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,8 +30,8 @@ public class SecurityConfig {
     @Autowired
     SecurityFilterChain securityFilterChain(HttpSecurity http, JWTValidationFilter jwtValidationFilter)
             throws Exception {
-        // var requestHandler = new CsrfTokenRequestAttributeHandler();
-        // requestHandler.setCsrfRequestAttributeName("_csrf");
+        var requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName("_csrf");
         http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth -> auth
                     .requestMatchers("/prestamos/crear", "/libreria/listar").authenticated()
@@ -40,12 +42,12 @@ public class SecurityConfig {
                     .anyRequest().permitAll())
                 .addFilterAfter(jwtValidationFilter, BasicAuthenticationFilter.class);
         http.cors(cors -> corsConfigurationSource());
-        http.csrf(csrf -> csrf.disable());
-        // http.csrf(csrf -> csrf
-        //         .csrfTokenRequestHandler(requestHandler)
-        //         .ignoringRequestMatchers("/authenticate")
-        //         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-        //         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
+        // http.csrf(csrf -> csrf.disable());
+        http.csrf(csrf -> csrf
+                .csrfTokenRequestHandler(requestHandler)
+                // .ignoringRequestMatchers("/authenticate")
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
         return http.build();
     }
 
